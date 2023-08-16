@@ -13,17 +13,14 @@ class RPUICorsiBlockTappingActivityBody extends StatefulWidget {
   final RPActivityEventLogger eventLogger;
 
   /// The [RPUICorsiBlockTappingActivityBody] constructor.
-  const RPUICorsiBlockTappingActivityBody(
-      this.activity, this.eventLogger, this.onResultChange,
-      {super.key});
+  const RPUICorsiBlockTappingActivityBody(this.activity, this.eventLogger, this.onResultChange, {super.key});
 
   @override
   RPUICorsiActivityBodyState createState() => RPUICorsiActivityBodyState();
 }
 
 /// State class for [ContinuousVisualTrackingActivityBody]
-class RPUICorsiActivityBodyState
-    extends State<RPUICorsiBlockTappingActivityBody> {
+class RPUICorsiActivityBodyState extends State<RPUICorsiBlockTappingActivityBody> {
   ActivityStatus activityStatus = ActivityStatus.Instruction;
   int corsiSpan = 0;
   int highlightedBlockID = 500;
@@ -111,8 +108,8 @@ class RPUICorsiActivityBodyState
           startTest();
         }
       } else {
-        widget.eventLogger.addCorrectGesture('Button tap',
-            'Succeeded test in ${!failedLast ? 'first' : 'second'} try. Tap order was: $tapOrder');
+        widget.eventLogger.addCorrectGesture(
+            'Button tap', 'Succeeded test in ${!failedLast ? 'first' : 'second'} try. Tap order was: $tapOrder');
         setState(() {
           failedLast = false;
           taskInfo = 'Well done';
@@ -151,8 +148,7 @@ class RPUICorsiActivityBodyState
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage(
-                            'packages/cognition_package/assets/images/Corsiintro.png'))),
+                        image: AssetImage('packages/cognition_package/assets/images/Corsiintro.png'))),
               ),
             ),
             SizedBox(
@@ -190,17 +186,7 @@ class RPUICorsiActivityBodyState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                height: 70,
-                width: 200,
-                color: readyForTap ? Colors.green : Colors.red,
-                child: Center(
-                  child: Text(
-                    taskInfo,
-                    style: const TextStyle(fontSize: 30, color: Colors.white),
-                  ),
-                ),
-              ),
+              widget.activity.uiOptions.instructionsWidget.getWidgetFromStatus(readyForTap, taskInfo),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [_makeButton(0), _makeButton(1)],
@@ -234,20 +220,16 @@ class RPUICorsiActivityBodyState
   }
 
   Widget _makeButton(int buttonNum) {
+    var status = BlockStatus.inactive;
+    if (highlightedBlockID == buttonNum) status = BlockStatus.highlighted;
+    if (tapOrder.contains(buttonNum)) status = BlockStatus.checked;
     return InkWell(
       onTap: readyForTap
           ? () {
               onBlockTap(buttonNum);
             }
           : null,
-      child: Container(
-        height: 60,
-        width: 60,
-        color: highlightedBlockID == buttonNum ? Colors.red : Colors.blue,
-        child: Center(
-          child: tapOrder.contains(buttonNum) ? const Icon(Icons.check) : null,
-        ),
-      ),
+      child: widget.activity.uiOptions.blockWidget.getWidgetFromStatus(status),
     );
   }
 }

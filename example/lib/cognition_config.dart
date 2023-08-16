@@ -1,4 +1,5 @@
 import 'package:cognition_package/model.dart';
+import 'package:cognition_package_demo_app/ui_options_configs.dart';
 import 'package:research_package/model.dart';
 
 // Here the list of cognitive test are added to an RP ordered task.
@@ -6,85 +7,48 @@ import 'package:research_package/model.dart';
 RPOrderedTask cognitionTask = RPOrderedTask(
   identifier: 'cognition_demo_task',
   steps: [
-    reactionTime,
-    pairedAssociatesLearning,
-    tapping,
     corsiBlockTapping,
-    stroopEffect,
-    rapidVisualInfoProcessing,
     trailMaking,
-    continuousVisualTracking,
-    wordRecall,
-    pictureSequenceMemory,
-    letterTapping,
-    flanker,
-    visualArrayChange,
-    delayedRecall,
-    completionStep,
   ],
 );
 
 // Note how steps can be localized by using a translation key and adding
 // the translation to the locale files in the 'assets/lang' folder.
-final completionStep = RPCompletionStep(
-    identifier: 'completion_step',
-    title: 'completion_title',
-    text: 'completion_text');
+final completionStep =
+    RPCompletionStep(identifier: 'completion_step', title: 'completion_title', text: 'completion_text');
 
 final tapping = RPTappingActivity(identifier: 'tapping_step');
 
 final reactionTime = RPReactionTimeActivity(identifier: 'reaction_time_step');
 
-final rapidVisualInfoProcessing = RPRapidVisualInfoProcessingActivity(
-    identifier: 'RVIP_step', lengthOfTest: 10);
+final rapidVisualInfoProcessing = RPRapidVisualInfoProcessingActivity(identifier: 'RVIP_step', lengthOfTest: 10);
 
-final trailMaking = RPTrailMakingActivity(
-    identifier: 'trail_making_step',
-    trailType: TrailType.B,
-    includeResults: false);
+final trailMaking =
+    RPTrailMakingActivity(identifier: 'trail_making_step', trailType: TrailType.B, includeResults: false);
 
-final letterTapping = RPLetterTappingActivity(
-    identifier: 'letter_tapping_step', includeResults: false);
+final letterTapping = RPLetterTappingActivity(identifier: 'letter_tapping_step', includeResults: false);
 
-final pairedAssociatesLearning =
-    RPPairedAssociatesLearningActivity(identifier: 'PAL_step');
+final pairedAssociatesLearning = RPPairedAssociatesLearningActivity(identifier: 'PAL_step');
 
-final corsiBlockTapping =
-    RPCorsiBlockTappingActivity(identifier: 'corsi_block_step');
+final corsiBlockTapping = RPCorsiBlockTappingActivity(
+    identifier: 'corsi_block_step', uiOptions: blockTappingUIOptions);
 
 final stroopEffect = RPStroopEffectActivity(identifier: 'stroop_ffect_step');
 
-final flanker = RPFlankerActivity(
-    identifier: 'flanker_step',
-    lengthOfTest: 45,
-    numberOfCards: 10,
-    includeResults: true);
+final flanker =
+    RPFlankerActivity(identifier: 'flanker_step', lengthOfTest: 45, numberOfCards: 10, includeResults: true);
 
 final pictureSequenceMemory = RPPictureSequenceMemoryActivity(
-    identifier: 'PSM_step',
-    lengthOfTest: 180,
-    numberOfTests: 1,
-    numberOfPics: 6,
-    includeResults: false);
+    identifier: 'PSM_step', lengthOfTest: 180, numberOfTests: 1, numberOfPics: 6, includeResults: false);
 
-final wordRecall = RPWordRecallActivity(
-    identifier: 'word_recall_step',
-    lengthOfTest: 180,
-    numberOfTests: 3,
-    includeResults: false);
+final wordRecall =
+    RPWordRecallActivity(identifier: 'word_recall_step', lengthOfTest: 180, numberOfTests: 3, includeResults: false);
 
 final delayedRecall = RPDelayedRecallActivity(
-    identifier: 'delayed_recall_step',
-    lengthOfTest: 180,
-    numberOfTests: 3,
-    includeResults: false);
+    identifier: 'delayed_recall_step', lengthOfTest: 180, numberOfTests: 3, includeResults: false);
 
 final visualArrayChange = RPVisualArrayChangeActivity(
-    identifier: 'VAC_step',
-    lengthOfTest: 180,
-    numberOfTests: 3,
-    waitTime: 3,
-    includeResults: false);
+    identifier: 'VAC_step', lengthOfTest: 180, numberOfTests: 3, waitTime: 3, includeResults: false);
 
 final continuousVisualTracking = RPContinuousVisualTrackingActivity(
     identifier: 'CVT_step',

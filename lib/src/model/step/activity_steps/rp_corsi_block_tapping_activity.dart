@@ -3,11 +3,14 @@ part of cognition_package_model;
 /// Corsi Block Tapping Test.
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class RPCorsiBlockTappingActivity extends RPActivityStep {
+  final RPCorsiBlockTappingUIOptions uiOptions;
+
   /// Create Corsi Block Tapping Test.
   RPCorsiBlockTappingActivity({
     required super.identifier,
     super.includeInstructions,
     super.includeResults,
+    this.uiOptions = const RPCorsiBlockTappingUIOptions(),
   });
 
   @override
