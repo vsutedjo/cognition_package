@@ -2,11 +2,13 @@
 import 'package:cognition_package/model.dart';
 import 'package:flutter/material.dart';
 
-final blockTappingUIOptions = RPCorsiBlockTappingUIOptions(
+/// An example for a custom Block Tapping UI configuration.
+final exampleBlockTappingUIOptions = RPCorsiBlockTappingUIOptions(
   blockWidget: CustomBlockWidget(),
-  instructionsWidget: CustomInstructionsWidget(),
+  instructionsWidget: CustomBlockTappingStatusWidget(),
 );
 
+/// A custom implementation of a custom block in block tapping UI.
 class CustomBlockWidget extends BlockWidget {
   @override
   Widget getWidgetFromStatus(BlockStatus status) {
@@ -22,9 +24,13 @@ class CustomBlockWidget extends BlockWidget {
           borderRadius: const BorderRadius.all(Radius.circular(5))),
     );
   }
+
+  @override
+  Function fromJson(Map<String, dynamic> json) => () => CustomBlockWidget();
 }
 
-class CustomInstructionsWidget extends InstructionsWidget {
+/// A custom implementation of the widget shown on top of the block tapping UI, showing the current status.
+class CustomBlockTappingStatusWidget extends BlockTappingStatusWidget {
   @override
   Widget getWidgetFromStatus(bool readyForTap, String text) {
     return Container(
@@ -41,4 +47,19 @@ class CustomInstructionsWidget extends InstructionsWidget {
       ),
     );
   }
+
+  Function fromJson(Map<String, dynamic> json) => () => CustomBlockTappingStatusWidget();
 }
+
+/// An example implementation of custom widget settings for a tile in trail making UI.
+final exampleTrailMakingUIOptions = RPCorsiTrailMakingUIOptions(
+    tileSettings: CorsiTrailMakingTileSettings(
+  Colors.orange,
+  TileShape.circle,
+  false,
+      TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+        fontSize: 20,
+      ),
+));

@@ -1,13 +1,18 @@
 part of cognition_package_model;
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class RPCorsiBlockTappingUIOptions {
   // Create custom widgets.
   final BlockWidget blockWidget;
-  final InstructionsWidget instructionsWidget;
+  final BlockTappingStatusWidget instructionsWidget;
   const RPCorsiBlockTappingUIOptions({
     this.blockWidget = const DefaultBlockWidget(),
-    this.instructionsWidget = const DefaultInstructionsWidget(),
+    this.instructionsWidget = const DefaultBlockTappingStatusWidget(),
   });
+
+  Function get fromJson => _$RPCorsiBlockTappingUIOptionsFromJson;
+  factory RPCorsiBlockTappingUIOptions.fromJson(Map<String, dynamic> json) =>
+      FromJsonFactory().fromJson(json) as RPCorsiBlockTappingUIOptions;
 }
 
 enum BlockStatus { inactive, highlighted, checked }
@@ -15,8 +20,10 @@ enum BlockStatus { inactive, highlighted, checked }
 /// A custom block widget should return a widget for each possible status.
 ///
 /// The UI class calls the [getWidgetFromStatus] function to get the correct widget.
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 abstract class BlockWidget {
   Widget getWidgetFromStatus(BlockStatus status);
+  Function fromJson(Map<String, dynamic> json);
 }
 
 /// This is an example implementation of a [BlockWidget].
@@ -34,15 +41,25 @@ class DefaultBlockWidget implements BlockWidget {
       ),
     );
   }
+
+  @override
+  Function fromJson(Map<String, dynamic> json) {
+    return () => const DefaultBlockWidget();
+  }
+
+  factory DefaultBlockWidget.fromJson(Map<String, dynamic> json) =>
+      FromJsonFactory().fromJson(json) as DefaultBlockWidget;
 }
 
 /// A custom widget that indicates whether the user should wait or tap.
-abstract class InstructionsWidget {
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+abstract class BlockTappingStatusWidget {
   Widget getWidgetFromStatus(bool readyForTap, String text);
+  Function fromJson(Map<String, dynamic> json);
 }
 
-class DefaultInstructionsWidget implements InstructionsWidget {
-  const DefaultInstructionsWidget();
+class DefaultBlockTappingStatusWidget implements BlockTappingStatusWidget {
+  const DefaultBlockTappingStatusWidget();
   @override
   Widget getWidgetFromStatus(bool readyForTap, String text) {
     return Container(
@@ -57,4 +74,7 @@ class DefaultInstructionsWidget implements InstructionsWidget {
       ),
     );
   }
+
+  @override
+  Function fromJson(Map<String, dynamic> json) => () => const DefaultBlockTappingStatusWidget();
 }

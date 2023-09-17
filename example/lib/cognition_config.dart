@@ -1,5 +1,5 @@
 import 'package:cognition_package/model.dart';
-import 'package:cognition_package_demo_app/ui_options_configs.dart';
+import 'package:cognition_package_demo_app/example_ui_options.dart';
 import 'package:research_package/model.dart';
 
 // Here the list of cognitive test are added to an RP ordered task.
@@ -23,15 +23,18 @@ final reactionTime = RPReactionTimeActivity(identifier: 'reaction_time_step');
 
 final rapidVisualInfoProcessing = RPRapidVisualInfoProcessingActivity(identifier: 'RVIP_step', lengthOfTest: 10);
 
-final trailMaking =
-    RPTrailMakingActivity(identifier: 'trail_making_step', trailType: TrailType.B, includeResults: false);
+final trailMaking = RPTrailMakingActivity(
+    identifier: 'trail_making_step',
+    trailType: TrailType.B,
+    includeResults: false,
+    uiOptions: exampleTrailMakingUIOptions);
 
 final letterTapping = RPLetterTappingActivity(identifier: 'letter_tapping_step', includeResults: false);
 
 final pairedAssociatesLearning = RPPairedAssociatesLearningActivity(identifier: 'PAL_step');
 
-final corsiBlockTapping = RPCorsiBlockTappingActivity(
-    identifier: 'corsi_block_step', uiOptions: blockTappingUIOptions);
+final corsiBlockTapping =
+    RPCorsiBlockTappingActivity(identifier: 'corsi_block_step', uiOptions: exampleBlockTappingUIOptions);
 
 final stroopEffect = RPStroopEffectActivity(identifier: 'stroop_ffect_step');
 

@@ -3,13 +3,15 @@ part of cognition_package_model;
 /// Trail Making Test.
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class RPTrailMakingActivity extends RPActivityStep {
+  final RPCorsiTrailMakingUIOptions uiOptions;
+
   /// Contructor for creating a Trail Making Test.
-  RPTrailMakingActivity({
-    required super.identifier,
-    super.includeInstructions,
-    super.includeResults,
-    this.trailType = TrailType.A,
-  });
+  RPTrailMakingActivity(
+      {required super.identifier,
+      super.includeInstructions,
+      super.includeResults,
+      this.trailType = TrailType.A,
+      this.uiOptions = const RPCorsiTrailMakingUIOptions()});
 
   /// The type of trail used in the test.
   TrailType trailType;
@@ -19,7 +21,7 @@ class RPTrailMakingActivity extends RPActivityStep {
     dynamic Function(dynamic) onResultChange,
     RPActivityEventLogger eventLogger,
   ) =>
-      RPUITrailMakingActivityBody(this, eventLogger, onResultChange);
+      RPUITrailMakingActivityBody(this, eventLogger, onResultChange, uiOptions);
 
   /// Results is number of mistakes made in the trailmaking task.
   /// Maximum score is 5 with -1 for each mistake made.

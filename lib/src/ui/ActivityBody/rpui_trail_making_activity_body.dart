@@ -14,21 +14,23 @@ class RPUITrailMakingActivityBody extends StatefulWidget {
   /// the [RPActivityEventLogger] for the [RPUITrailMakingActivityBody].
   final RPActivityEventLogger eventLogger;
 
+  /// The UI options for rendering custom UI elements.
+  final RPCorsiTrailMakingUIOptions uiOptions;
+
   /// The [RPUITrailMakingActivityBody] constructor.
   const RPUITrailMakingActivityBody(
     this.activity,
     this.eventLogger,
-    this.onResultChange, {
+    this.onResultChange,
+    this.uiOptions, {
     super.key,
   });
 
   @override
-  RPUITrailMakingActivityBodyState createState() =>
-      RPUITrailMakingActivityBodyState();
+  RPUITrailMakingActivityBodyState createState() => RPUITrailMakingActivityBodyState();
 }
 
-class RPUITrailMakingActivityBodyState
-    extends State<RPUITrailMakingActivityBody> {
+class RPUITrailMakingActivityBodyState extends State<RPUITrailMakingActivityBody> {
   PathTracker? pathTracker;
   ActivityStatus activityStatus = ActivityStatus.Instruction;
   List<Location>? boxLocations;
@@ -60,24 +62,20 @@ class RPUITrailMakingActivityBodyState
   Future<bool> buildCanvas(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     boxLocations = isTypeA
-        ? TrailMakingLists()
-            .A(size.width, size.height - AppBar().preferredSize.height - 100)
-        : TrailMakingLists()
-            .B(size.width, size.height - AppBar().preferredSize.height - 100);
+        ? TrailMakingLists().A(size.width, size.height - AppBar().preferredSize.height - 100)
+        : TrailMakingLists().B(size.width, size.height - AppBar().preferredSize.height - 100);
     pathTracker = PathTracker(widget.eventLogger, boxLocations!);
     return Future.value(true);
   }
 
   void _onPanStart(DragStartDetails start) {
-    Offset pos = (context.findRenderObject() as RenderBox)
-        .globalToLocal(start.globalPosition);
+    Offset pos = (context.findRenderObject() as RenderBox).globalToLocal(start.globalPosition);
     pathTracker?.addNewPath(pos);
     pathTracker?.notifyListeners();
   }
 
   void _onPanUpdate(DragUpdateDetails update) {
-    Offset pos = (context.findRenderObject() as RenderBox)
-        .globalToLocal(update.globalPosition);
+    Offset pos = (context.findRenderObject() as RenderBox).globalToLocal(update.globalPosition);
     pathTracker?.updateCurrentPath(pos, testConcluded);
     pathTracker?.notifyListeners();
   }
@@ -125,8 +123,7 @@ class RPUITrailMakingActivityBodyState
               child: Text(
                 isTypeA
                     ? locale.translate("trail_making.connect_boxes_type_A")
-                    : locale
-                        .translate('trail_making.alternate_letters_numbers'),
+                    : locale.translate('trail_making.alternate_letters_numbers'),
                 style: const TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
@@ -170,8 +167,7 @@ class RPUITrailMakingActivityBodyState
           builder: (context, snapshot) {
             if (!snapshot.hasData) return const CircularProgressIndicator();
             return SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  AppBar().preferredSize.height,
+              height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
               width: MediaQuery.of(context).size.width,
               child: GestureDetector(
                 onPanStart: _onPanStart,
@@ -179,7 +175,7 @@ class RPUITrailMakingActivityBodyState
                 onPanEnd: _onPanEnd,
                 child: ClipRect(
                   child: CustomPaint(
-                    painter: TrailPainter(pathTracker),
+                    painter: TrailPainter(pathTracker, widget.uiOptions.tileSettings),
                   ),
                 ),
               ),
@@ -201,23 +197,32 @@ class RPUITrailMakingActivityBodyState
 
 class TrailPainter extends CustomPainter {
   final PathTracker? pathTracker;
+  final CorsiTrailMakingTileSettings settings;
 
-  TrailPainter(this.pathTracker) : super(repaint: pathTracker);
+  TrailPainter(this.pathTracker, this.settings) : super(repaint: pathTracker);
 
   @override
   void paint(Canvas canvas, Size size) {
     if (pathTracker != null) {
-      canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height),
-          Paint()..color = Colors.transparent);
+      canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), Paint()..color = Colors.transparent);
       for (Location location in pathTracker!.locations) {
+        // Draw the tile, considering the UI settings.
+        var tilePaint = Paint();
+        tilePaint.color = settings.color;
+        if (settings.outlined) {
+          tilePaint.style = PaintingStyle.stroke;
+          tilePaint.strokeWidth = 1.0;
+        } else {
+          tilePaint.style = PaintingStyle.fill;
+        }
+        if (settings.shape == TileShape.rectangle) {
+          canvas.drawRect(location.rect, tilePaint);
+        } else if (settings.shape == TileShape.circle) {
+          canvas.drawCircle(location.offset, 26, tilePaint);
+        }
+
         final textPainter = TextPainter(
-          text: TextSpan(
-            text: location.id,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-            ),
-          ),
+          text: TextSpan(text: location.id, style: settings.textStyle),
           textDirection: TextDirection.ltr,
         );
         textPainter.layout(
@@ -227,14 +232,8 @@ class TrailPainter extends CustomPainter {
         );
         // offset for id 10, as it is wider than the rest.
         int tx = location.id == '10' ? 11 : 6;
-        Offset textOffset =
-            Offset(location.offset.dx - tx, location.offset.dy - 12);
+        Offset textOffset = Offset(location.offset.dx - tx, location.offset.dy - 12);
         textPainter.paint(canvas, textOffset);
-        canvas.drawRect(
-            location.rect,
-            Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 1.0);
       }
       for (Path path in pathTracker!._paths) {
         canvas.drawPath(
@@ -293,8 +292,7 @@ class PathTracker extends ChangeNotifier {
     if (_isDraging && !_isFinished) {
       Path path = _paths.last;
       path.lineTo(newPos.dx, newPos.dy);
-      Offset firstPoint =
-          path.computeMetrics().first.getTangentForOffset(0)!.position;
+      Offset firstPoint = path.computeMetrics().first.getTangentForOffset(0)!.position;
 
       // Avoid if drag hits another locations before hitting the next location (e.g. A-C-B)
       List<Location> locationCopy = List.from(locations);
@@ -303,8 +301,8 @@ class PathTracker extends ChangeNotifier {
       for (Location l in locationCopy) {
         if (l.rect.contains(newPos)) {
           _isDraging = false;
-          gestureController.addWrongGesture('Draw path',
-              'Drew a path which hit ${l.id} instead of the correct, next item ${nextLocation.id}');
+          gestureController.addWrongGesture(
+              'Draw path', 'Drew a path which hit ${l.id} instead of the correct, next item ${nextLocation.id}');
           deleteWrong();
           mistakeCount++;
           return;
@@ -312,10 +310,9 @@ class PathTracker extends ChangeNotifier {
       }
 
       // If dragging directly without lifting finger
-      if (prevLocation.rect.contains(firstPoint) &&
-          nextLocation.rect.contains(newPos)) {
-        gestureController.addCorrectGesture('Draw path',
-            'Drew a correct path from ${prevLocation.id} to ${nextLocation.id}');
+      if (prevLocation.rect.contains(firstPoint) && nextLocation.rect.contains(newPos)) {
+        gestureController.addCorrectGesture(
+            'Draw path', 'Drew a correct path from ${prevLocation.id} to ${nextLocation.id}');
         Path newPath = Path();
         newPath.moveTo(newPos.dx, newPos.dy);
         _paths.add(newPath);
@@ -345,15 +342,12 @@ class PathTracker extends ChangeNotifier {
             .last
             .getTangentForOffset(path.computeMetrics().last.length)!
             .position;
-        Offset firstPoint =
-            path.computeMetrics().first.getTangentForOffset(0)!.position;
+        Offset firstPoint = path.computeMetrics().first.getTangentForOffset(0)!.position;
         if (!prevLocation.rect.contains(firstPoint)) {
-          gestureController.addWrongGesture('Draw path',
-              'Drew a path which didnt start in ${prevLocation.id}');
+          gestureController.addWrongGesture('Draw path', 'Drew a path which didnt start in ${prevLocation.id}');
           deleteWrong();
         } else if (!nextLocation.rect.contains(lastPoint)) {
-          gestureController.addWrongGesture(
-              'Draw path', 'Drew a path which didnt end in ${nextLocation.id}');
+          gestureController.addWrongGesture('Draw path', 'Drew a path which didnt end in ${nextLocation.id}');
           deleteWrong();
         }
       }

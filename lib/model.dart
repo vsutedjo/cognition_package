@@ -24,6 +24,7 @@ part 'src/model/step/activity_steps/rp_trail_making_activity.dart';
 part 'src/model/step/activity_steps/rp_visual_array_change_activity.dart';
 part 'src/model/step/activity_steps/rp_word_recall_activity.dart';
 part 'src/model/step/ui_options/rp_corsi_block_tapping_ui_options.dart';
+part 'src/model/step/ui_options/rp_trail_making_ui_options.dart';
 part 'src/result/rp_delayed_recall_result.dart';
 part 'src/result/rp_flanker_result.dart';
 part 'src/result/rp_picture_sequence_memory_result.dart';
