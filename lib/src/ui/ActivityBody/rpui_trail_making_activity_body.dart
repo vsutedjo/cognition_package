@@ -118,16 +118,15 @@ class RPUITrailMakingActivityBodyState extends State<RPUITrailMakingActivityBody
                 textAlign: TextAlign.center,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                isTypeA
-                    ? locale.translate("trail_making.connect_boxes_type_A")
-                    : locale.translate('trail_making.alternate_letters_numbers'),
-                style: const TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
+            if (!isTypeA)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  locale.translate('trail_making.alternate_letters_numbers'),
+                  style: const TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
             Padding(
               padding: const EdgeInsets.all(5),
               child: Image(
