@@ -6,7 +6,12 @@ class RPCorsiTrailMakingUIOptions {
   // Create custom widgets.
   @JsonKey(includeFromJson: false, includeToJson: false)
   final CorsiTrailMakingTileSettings tileSettings;
-  const RPCorsiTrailMakingUIOptions({this.tileSettings = const CorsiTrailMakingTileSettings.defaultSettings()});
+  final AssetImage numbersInstructionImage, mixedInstructionImage;
+  const RPCorsiTrailMakingUIOptions({
+    this.tileSettings = const CorsiTrailMakingTileSettings.defaultSettings(),
+    this.numbersInstructionImage = defaultNumbersInstructionImage,
+    this.mixedInstructionImage = defaultMixedInstructionImage,
+  });
 
   Function get fromJson => _$RPCorsiTrailMakingUIOptionsFromJson;
   factory RPCorsiTrailMakingUIOptions.fromJson(Map<String, dynamic> json) =>
@@ -35,3 +40,8 @@ class CorsiTrailMakingTileSettings {
           fontSize: 20,
         );
 }
+
+const AssetImage defaultNumbersInstructionImage =
+    AssetImage("packages/cognition_package/assets/images/trailmaking_a.png");
+const AssetImage defaultMixedInstructionImage =
+    AssetImage("packages/cognition_package/assets/images/trailmaking_b.png");

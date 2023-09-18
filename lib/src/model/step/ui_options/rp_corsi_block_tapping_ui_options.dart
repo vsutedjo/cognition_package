@@ -4,11 +4,12 @@ part of cognition_package_model;
 class RPCorsiBlockTappingUIOptions {
   // Create custom widgets.
   final BlockWidget blockWidget;
-  final BlockTappingStatusWidget instructionsWidget;
-  const RPCorsiBlockTappingUIOptions({
-    this.blockWidget = const DefaultBlockWidget(),
-    this.instructionsWidget = const DefaultBlockTappingStatusWidget(),
-  });
+  final BlockTappingStatusWidget statusWidget;
+  final AssetImage instructionsImage;
+  const RPCorsiBlockTappingUIOptions(
+      {this.blockWidget = const DefaultBlockWidget(),
+      this.statusWidget = const DefaultBlockTappingStatusWidget(),
+      this.instructionsImage = defaultInstructionsImage});
 
   Function get fromJson => _$RPCorsiBlockTappingUIOptionsFromJson;
   factory RPCorsiBlockTappingUIOptions.fromJson(Map<String, dynamic> json) =>
@@ -78,3 +79,5 @@ class DefaultBlockTappingStatusWidget implements BlockTappingStatusWidget {
   @override
   Function fromJson(Map<String, dynamic> json) => () => const DefaultBlockTappingStatusWidget();
 }
+
+const AssetImage defaultInstructionsImage = AssetImage('packages/cognition_package/assets/images/Corsiintro.png');

@@ -498,7 +498,7 @@ RPCorsiBlockTappingUIOptions _$RPCorsiBlockTappingUIOptionsFromJson(Map<String, 
       blockWidget: json['block_widget'] == null
           ? const DefaultBlockWidget()
           : DefaultBlockWidget.fromJson(json['block_widget'] as Map<String, dynamic>),
-      instructionsWidget: const DefaultBlockTappingStatusWidget(),
+      statusWidget: const DefaultBlockTappingStatusWidget(),
     );
 
 RPCorsiTrailMakingUIOptions _$RPCorsiTrailMakingUIOptionsFromJson(Map<String, dynamic> json) =>

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// An example for a custom Block Tapping UI configuration.
 final exampleBlockTappingUIOptions = RPCorsiBlockTappingUIOptions(
   blockWidget: CustomBlockWidget(),
-  instructionsWidget: CustomBlockTappingStatusWidget(),
+  statusWidget: CustomBlockTappingStatusWidget(),
 );
 
 /// A custom implementation of a custom block in block tapping UI.
@@ -48,6 +48,7 @@ class CustomBlockTappingStatusWidget extends BlockTappingStatusWidget {
     );
   }
 
+  @override
   Function fromJson(Map<String, dynamic> json) => () => CustomBlockTappingStatusWidget();
 }
 
@@ -57,9 +58,9 @@ final exampleTrailMakingUIOptions = RPCorsiTrailMakingUIOptions(
   Colors.orange,
   TileShape.circle,
   false,
-      TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.w600,
-        fontSize: 20,
-      ),
+  const TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+    fontSize: 20,
+  ),
 ));

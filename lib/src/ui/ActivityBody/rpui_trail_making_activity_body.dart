@@ -130,9 +130,11 @@ class RPUITrailMakingActivityBodyState extends State<RPUITrailMakingActivityBody
             ),
             Padding(
               padding: const EdgeInsets.all(5),
-              child: Image.asset(isTypeA
-                  ? 'packages/cognition_package/assets/images/trailmaking_a.png'
-                  : 'packages/cognition_package/assets/images/trailmaking_b.png'),
+              child: Image(
+                image: (isTypeA
+                    ? widget.activity.uiOptions.numbersInstructionImage
+                    : widget.activity.uiOptions.mixedInstructionImage),
+              ),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width / 2,

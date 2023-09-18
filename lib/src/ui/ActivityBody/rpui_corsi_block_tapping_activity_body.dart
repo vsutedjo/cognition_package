@@ -145,10 +145,8 @@ class RPUICorsiActivityBodyState extends State<RPUICorsiBlockTappingActivityBody
               child: Container(
                 height: MediaQuery.of(context).size.height / 2.5,
                 width: MediaQuery.of(context).size.width / 1.1,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage('packages/cognition_package/assets/images/Corsiintro.png'))),
+                decoration: BoxDecoration(
+                    image: DecorationImage(fit: BoxFit.fill, image: widget.activity.uiOptions.instructionsImage)),
               ),
             ),
             SizedBox(
@@ -186,7 +184,7 @@ class RPUICorsiActivityBodyState extends State<RPUICorsiBlockTappingActivityBody
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              widget.activity.uiOptions.instructionsWidget.getWidgetFromStatus(readyForTap, taskInfo),
+              widget.activity.uiOptions.statusWidget.getWidgetFromStatus(readyForTap, taskInfo),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [_makeButton(0), _makeButton(1)],
