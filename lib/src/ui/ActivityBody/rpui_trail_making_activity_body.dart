@@ -130,6 +130,7 @@ class RPUITrailMakingActivityBodyState extends State<RPUITrailMakingActivityBody
             Padding(
               padding: const EdgeInsets.all(5),
               child: Image(
+                fit: BoxFit.fitWidth,
                 image: (isTypeA
                     ? widget.activity.uiOptions.numbersInstructionImage
                     : widget.activity.uiOptions.mixedInstructionImage),

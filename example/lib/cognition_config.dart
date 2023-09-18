@@ -7,8 +7,9 @@ import 'package:research_package/model.dart';
 RPOrderedTask cognitionTask = RPOrderedTask(
   identifier: 'cognition_demo_task',
   steps: [
+    trailMaking1,
+    trailMaking2,
     corsiBlockTapping,
-    trailMaking,
   ],
 );
 
@@ -23,7 +24,13 @@ final reactionTime = RPReactionTimeActivity(identifier: 'reaction_time_step');
 
 final rapidVisualInfoProcessing = RPRapidVisualInfoProcessingActivity(identifier: 'RVIP_step', lengthOfTest: 10);
 
-final trailMaking = RPTrailMakingActivity(
+final trailMaking1 = RPTrailMakingActivity(
+    identifier: 'trail_making_step',
+    trailType: TrailType.A,
+    includeResults: false,
+    uiOptions: exampleTrailMakingUIOptions);
+
+final trailMaking2 = RPTrailMakingActivity(
     identifier: 'trail_making_step',
     trailType: TrailType.B,
     includeResults: false,
